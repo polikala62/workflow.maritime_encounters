@@ -63,7 +63,7 @@ def coord_overlap(in_coords, check_coords):
         return False
 
 # Generate dictionary of adjacent tiles by checking the coordinates of each corner.
-def adjacent_tiles_dict(in_path, check_extension, buffer_distance=0, in_crs="", out_poly_fc="", include_self=True):
+def adjacent_tiles_dict(in_path, check_extension, buffer_distance=0, in_crs="", out_poly_fc="", include_self=True, filter_text=""):
     
     # Create dictionaries for processing and output.
     extent_dict = {}
@@ -90,7 +90,13 @@ def adjacent_tiles_dict(in_path, check_extension, buffer_distance=0, in_crs="", 
         
         for name in files:
             
-            if str(name).endswith(check_extension):
+            if filter_text != "":
+                
+                check_file = filter_text in str(name) and str(name).endswith(check_extension)
+            else:
+                check_file = str(name).endswith(check_extension)
+            
+            if check_file:
                 
                 iter_path = os.path.join(root, name)
                 

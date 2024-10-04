@@ -58,7 +58,7 @@ def prcnt_complete(pr_timedelta_list, pr_total, pr_time, prcnt_inc=5, leading_sp
         breakpoint_dict[int(j) + bool(j%1)] = ((i+1)*prcnt_inc)
     
     # Get current time as string.
-    current_time_string = str(datetime.datetime.now()).split(".")[0]
+    current_time_string = str(datetime.datetime.now()).split(" ")[-1].split(".")[0]
     
     # Estimate time remaining.
     est_string = str(datetime_time_remaining(pr_timedelta_list, pr_count, pr_total, timedelta_span, method)).split(".")[0]

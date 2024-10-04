@@ -7,7 +7,7 @@ import arcpy, os, json, datetime
 from arcpy.sa import FocalStatistics, Raster, NbrCircle, NbrAnnulus
 from palaeo_dem import adjacent_tiles_dict, check_crs, replace_raster, track_completion
 
-def generalise_raster_tiles(in_dir, out_dir, check_extension, in_remove_fc, pixel_type, line_buffer_dist, generalise_dist, out_resolution,
+def generalise_raster_tiles(in_dir, out_dir, check_extension, in_remove_lines, in_remove_polygons, pixel_type, line_buffer_dist, generalise_dist, out_resolution,
                             adjacency_json="", generalise_type="CIRCLE", append_to_output_filename=""):
     
     print("Started script 'generalise_raster_tiles'.")
@@ -80,8 +80,6 @@ def generalise_raster_tiles(in_dir, out_dir, check_extension, in_remove_fc, pixe
                 # Load raster object.
                 mosaic_raster = Raster(pr_mosaic_path)
                 
-                # Delete raster file to free up memory.
-                #arcpy.management.Delete(pr_mosaic_path)
                 # Set extent to the extent of the iterated raster (again, just in case).
                 arcpy.env.extent = iter_extent
                 #print("Resampling...")
@@ -109,7 +107,7 @@ def generalise_raster_tiles(in_dir, out_dir, check_extension, in_remove_fc, pixe
                 # Create path for export.
                 out_path = os.path.join(out_dir, "{}{}.{}".format(iter_basename, append_to_output_filename, iter_extension))
                 #print("Substituting...")
-                sub_raster = replace_raster.replace_raster(resample_raster, mod_raster, in_remove_fc, pr_crs, iter_extent, buffer_distance=line_buffer_dist)
+                sub_raster = replace_raster.replace_raster(resample_raster, mod_raster, in_remove_lines, in_remove_polygons, pr_crs, iter_extent, buffer_distance=line_buffer_dist)
                 
                 # Set extent to the extent of the iterated raster (again, just in case).
                 arcpy.env.extent = iter_extent
